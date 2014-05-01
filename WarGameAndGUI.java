@@ -1,18 +1,17 @@
-/*Sierra Thibodeau
-CS 110 Final project*/
 import javax.swing.*;
-
 import java.awt.*;
+
 import java.awt.event.*;
 import java.util.Random;      //Needed for shuffle method
 import java.util.ArrayList;   //Needed for ArrayList
 import java.util.Collections; //Needed for shuffle method
 
 
-public class WarGUI extends JFrame
+public class WarGameAndGUI extends JFrame
 {
    private JPanel panel,player1Panel, player2Panel, gamePanel;
    private JButton playHand, compareHand, startGame;
+   private JButton startNewGame;
    private final int WINDOW_WIDTH = 350;
    private final int WINDOW_HEIGHT = 250;
    public static Deck warDeck; //Creating the Deck of Cards
@@ -22,12 +21,12 @@ public class WarGUI extends JFrame
 	public Hand player1Hand, player2Hand;
 	public boolean done;
    public ImageIcon player1Front, player1Back, player2Front, player2Back;
-   public JLabel pic, player1PicFront, player2PicFront,player1PicBack,player2PicBack, winner, player1Score, player2Score;
+   public JLabel pic, player1PicFront, player2PicFront,player1PicBack,player2PicBack, winner;
    private JLabel playerCard1;
    private JLabel playerCard2;
   
 
-   public WarGUI()
+   public WarGameAndGUI()
    {
       setTitle("WAR");
       
@@ -35,51 +34,51 @@ public class WarGUI extends JFrame
       
       setLayout(new BorderLayout());
       
-      //create panels and set backrgrounds
-      JPanel panel = new JPanel();
-      panel.setBackground(Color.red);
+    /* JPanel panel = new JPanel();
       JPanel gamePanel = new JPanel();
-      gamePanel.setBackground(Color.green);
       JPanel player1Panel = new JPanel();
-      player1Panel.setBackground(Color.blue);
-      JPanel player2Panel = new JPanel();
-      player2Panel.setBackground(Color.blue);
+      JPanel player2Panel = new JPanel();*/
       
       
-      //add panels
-      add(panel, BorderLayout.NORTH);
-      add(gamePanel, BorderLayout.CENTER);
+      
+      buildPanel();
+      add(panel);
+      //add(panel, BorderLayout.CENTER);
+      /*add(gamePanel, BorderLayout.CENTER);
       add(player1Panel, BorderLayout.WEST);
-      add(player2Panel, BorderLayout.EAST);
+      add(player2Panel, BorderLayout.EAST);*/
       
       
       setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
       
       setVisible(true);
       
-      //create deck and hands
       warDeck = new Deck(); //Creating the Deck of Cards
       warDeck.shuffle();//shuffle deck
       player1Hand = new Hand(); //create player 1 hand
       player2Hand = new Hand(); //create player 2 hand
       done = false;
       split(warDeck);//split the deck
-      
  
+   }
+   
+   private void buildPanel()
+   {
       //start game button
       startGame = new JButton("Start Game");
       startGame.addActionListener(new StartGameListener());
-      panel.add(startGame,BorderLayout.NORTH);
+      panel = new JPanel();
+      panel.add(startGame, BorderLayout.NORTH);
       
       //play hand button
       playHand = new JButton("Play Hand");
       playHand.addActionListener(new PlayHandListener());
-      panel.add(playHand,BorderLayout.NORTH);
+      panel.add(playHand, BorderLayout.CENTER);
       
       //compare hand button
       compareHand = new JButton("Compare Cards");
       compareHand.addActionListener( new CompareHandListener());
-      panel.add(compareHand,BorderLayout.NORTH);
+      panel.add(compareHand, BorderLayout.SOUTH);
       
       
    
@@ -87,8 +86,8 @@ public class WarGUI extends JFrame
    //button will start the game and display the back side of the cards
    private class StartGameListener implements ActionListener{
       public void actionPerformed(ActionEvent e){
-        gamePanel.add(createBackIcons());
-         //pack();
+        createBackIcons();
+         pack();
          }
          }
    
@@ -100,7 +99,7 @@ public class WarGUI extends JFrame
          
          createFrontIcons();
          panel.remove(winner);
-         //pack();
+         pack();
 	   
       }
    }
@@ -111,7 +110,7 @@ public class WarGUI extends JFrame
       public void actionPerformed(ActionEvent e)
       {
       compareCards();
-     // pack();
+      pack();
       }
       }
    
@@ -153,10 +152,10 @@ public class WarGUI extends JFrame
    player2Front = p2Card2.cardImage();
    
    //add pictures
-   gamePanel.add(player1PicBack);
-   gamePanel.add(player1PicFront);
-   gamePanel.add(player2PicBack);
-   gamePanel.add(player2PicFront);
+   panel.add(player1PicBack);
+   panel.add(player1PicFront);
+   panel.add(player2PicBack);
+   panel.add(player2PicFront);
 	
 
 	if (p1Card2.getRank()>p2Card2.getRank()) //if player1 wins
@@ -166,7 +165,7 @@ public class WarGUI extends JFrame
 	player1.addCard(p2Card1);
 	player1.addCard(p2Card2);
    winner = new JLabel("Player 1 Wins");
-   gamePanel.add(winner);
+   panel.add(winner);
 	warDeck.shuffle();
 	}
 
@@ -177,7 +176,7 @@ public class WarGUI extends JFrame
 	player2.addCard(p2Card1);
 	player2.addCard(p2Card2);
    winner = new JLabel("Player 2 Wins");
-   gamePanel.add(winner);
+   panel.add(winner);
 	warDeck.shuffle();
 	}
 	else //if a war is declared
@@ -187,7 +186,7 @@ public class WarGUI extends JFrame
 	}
    
    //creates the back side of the cards to display
-   public Component createBackIcons()
+   public void createBackIcons()
    {
       //create image icons
 		player1Back = new ImageIcon("back.jpg");
@@ -198,9 +197,8 @@ public class WarGUI extends JFrame
 		player2PicBack = new JLabel(player2Back);
       
       //add pictures to panels
-		gamePanel.add(player1PicBack,BorderLayout.CENTER);
-		gamePanel.add(player2PicBack,BorderLayout.CENTER);
-		return player1PicBack;
+		panel.add(player1PicBack);
+		panel.add(player2PicBack);
       
    }
    
@@ -220,18 +218,17 @@ public class WarGUI extends JFrame
 
  
       //remove back pictures and add pictures to panels
-      gamePanel.remove(player1PicBack);
-      gamePanel.remove(player2PicBack);
-	   gamePanel.add(player1PicFront,BorderLayout.CENTER);
-	   gamePanel.add(player2PicFront,BorderLayout.CENTER);
+      panel.remove(player1PicBack);
+      panel.remove(player2PicBack);
+	   panel.add(player1PicFront,BorderLayout.CENTER);
+	   panel.add(player2PicFront,BorderLayout.CENTER);
       }
       
    //compare the two cards that were drawn   
    public void compareCards(){
       //remove cards from panel
-      displayScore();
-      gamePanel.remove(player1PicFront);
-      gamePanel.remove(player2PicFront);
+      panel.remove(player1PicFront);
+      panel.remove(player2PicFront);
       //panel.remove(winner);
    
 	   if (p1Card.getRank()>p2Card.getRank()) //if player1 wins
@@ -240,7 +237,7 @@ public class WarGUI extends JFrame
 		      player1Hand.addCard(p1Card);
 		      player1Hand.addCard(p2Card);
             winner = new JLabel("Player 1 Wins");
-            gamePanel.add(winner);
+            panel.add(winner);
 	      }
 
 	   else if (p1Card.getRank()<p2Card.getRank()) //if player2 wins
@@ -249,7 +246,7 @@ public class WarGUI extends JFrame
 		      player2Hand.addCard(p1Card);
 		      player2Hand.addCard(p2Card);
             winner = new JLabel("Player 2 Wins");
-            gamePanel.add(winner);
+            panel.add(winner);
 	      }
 	   else //if equal, then there is a war
 	      {
@@ -257,21 +254,11 @@ public class WarGUI extends JFrame
 
 	        }
 	}
-  //display the score for each player
-  public void displayScore(){
-      String play1 = Integer.toString(player1Hand.numCards());
-      player1Score = new JLabel("Player 1 Score: "+play1);
-      player1Panel.add(player1Score);
-      
-      String play2 = Integer.toString(player2Hand.numCards());
-      player2Score = new JLabel("Player 2 Score: "+play2);
-      player2Panel.add(player2Score);
-      }
 
    //driver for the program
    public static void main(String [] args)
    {
-      WarGUI window = new WarGUI();
+      WarGameAndGUI window = new WarGameAndGUI();
    }
               
    }
