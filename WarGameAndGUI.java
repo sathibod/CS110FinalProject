@@ -1,10 +1,13 @@
+/*Sierra Thibodeau
+CS 110 Final Project*/
+
 import javax.swing.*;
 import java.awt.*;
 
 import java.awt.event.*;
-import java.util.Random;      //Needed for shuffle method
-import java.util.ArrayList;   //Needed for ArrayList
-import java.util.Collections; //Needed for shuffle method
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections; 
 
 
 public class WarGameAndGUI extends JFrame
@@ -14,7 +17,7 @@ public class WarGameAndGUI extends JFrame
    private JButton startNewGame;
    private final int WINDOW_WIDTH = 350;
    private final int WINDOW_HEIGHT = 250;
-   public static Deck warDeck; //Creating the Deck of Cards
+   public static Deck warDeck;
 	public Deck player1Deck;
 	public Deck player2Deck;
 	public Card p1Card, p2Card;
@@ -22,37 +25,29 @@ public class WarGameAndGUI extends JFrame
 	public boolean done;
    public ImageIcon player1Front, player1Back, player2Front, player2Back;
    public JLabel pic, player1PicFront, player2PicFront,player1PicBack,player2PicBack, winner;
-   private JLabel playerCard1;
-   private JLabel playerCard2;
+   
   
 
    public WarGameAndGUI()
    {
+      //build windown
       setTitle("WAR");
       
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       
       setLayout(new BorderLayout());
       
-    /* JPanel panel = new JPanel();
-      JPanel gamePanel = new JPanel();
-      JPanel player1Panel = new JPanel();
-      JPanel player2Panel = new JPanel();*/
-      
       
       
       buildPanel();
       add(panel);
-      //add(panel, BorderLayout.CENTER);
-      /*add(gamePanel, BorderLayout.CENTER);
-      add(player1Panel, BorderLayout.WEST);
-      add(player2Panel, BorderLayout.EAST);*/
       
       
       setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
       
       setVisible(true);
       
+      //create game
       warDeck = new Deck(); //Creating the Deck of Cards
       warDeck.shuffle();//shuffle deck
       player1Hand = new Hand(); //create player 1 hand
@@ -62,6 +57,7 @@ public class WarGameAndGUI extends JFrame
  
    }
    
+   //build panel
    private void buildPanel()
    {
       //start game button
